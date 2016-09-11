@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TeamCode.Controllers
 {
     /// <summary>
-    /// Demo Controller.
+    /// Demo Controller..
     /// </summary>
     [Route("api/[controller]")]
     public class ValuesController : Controller
