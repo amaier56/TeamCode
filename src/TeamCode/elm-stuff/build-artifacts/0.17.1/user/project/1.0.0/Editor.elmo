@@ -1,0 +1,107 @@
+var _user$project$Editor$viewMessage = function (msg) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(msg)
+			]));
+};
+var _user$project$Editor$echoServer = A2(
+	_elm_lang$core$Basics_ops['++'],
+	'ws://',
+	A2(_elm_lang$core$Basics_ops['++'], 'localhost:2848', '/ws'));
+var _user$project$Editor$Model = F2(
+	function (a, b) {
+		return {input: a, messages: b};
+	});
+var _user$project$Editor$init = {
+	ctor: '_Tuple2',
+	_0: A2(
+		_user$project$Editor$Model,
+		'',
+		_elm_lang$core$Native_List.fromArray(
+			[])),
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$Editor$update = F2(
+	function (msg, _p0) {
+		var _p1 = _p0;
+		var _p4 = _p1.messages;
+		var _p3 = _p1.input;
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'Input':
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_user$project$Editor$Model, _p2._0, _p4),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Send':
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_user$project$Editor$Model, '', _p4),
+					_1: A2(_elm_lang$websocket$WebSocket$send, _user$project$Editor$echoServer, _p3)
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: A2(
+						_user$project$Editor$Model,
+						_p3,
+						A2(_elm_lang$core$List_ops['::'], _p2._0, _p4)),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$Editor$NewMessage = function (a) {
+	return {ctor: 'NewMessage', _0: a};
+};
+var _user$project$Editor$subscriptions = function (model) {
+	return A2(_elm_lang$websocket$WebSocket$listen, _user$project$Editor$echoServer, _user$project$Editor$NewMessage);
+};
+var _user$project$Editor$Send = {ctor: 'Send'};
+var _user$project$Editor$Input = function (a) {
+	return {ctor: 'Input', _0: a};
+};
+var _user$project$Editor$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onInput(_user$project$Editor$Input),
+						_elm_lang$html$Html_Attributes$value(model.input)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Send)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Send')
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$Editor$viewMessage,
+					_elm_lang$core$List$reverse(model.messages)))
+			]));
+};
+var _user$project$Editor$main = {
+	main: _elm_lang$html$Html_App$program(
+		{init: _user$project$Editor$init, view: _user$project$Editor$view, update: _user$project$Editor$update, subscriptions: _user$project$Editor$subscriptions})
+};
